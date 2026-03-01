@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Sedglo — Hair & Beauty</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0A0705;
+  --parchment:#FDF8F0;
+  --blush:#F2C0A0;
+  --terracotta:#C2673A;
+  --rust:#8B3A1E;
+  --gold:#E8B86D;
+  --gold2:#F5D49A;
+  --sage:#A8B89A;
+  --deep:#1C0F08;
+  --mid:#4A2E1A;
+  --muted:#9A7B6A;
+  --border:rgba(200,100,60,0.2);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--parchment);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* NOISE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9990;opacity:0.4;
+}
+
+/* ── CUSTOM CURSOR: Sparkle Wand ── */
+#cur-wand{
+  position:fixed;pointer-events:none;z-index:9999;
+  width:28px;height:28px;
+  transform:translate(-4px,-4px);
+  transition:transform .15s ease;
+}
+#cur-wand svg{display:block;filter:drop-shadow(0 0 4px rgba(232,184,109,.8))}
+.cur-trail{
+  position:fixed;pointer-events:none;z-index:9998;
+  border-radius:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(194,103,58,.55) 0%,transparent 70%);
+  transition:width .25s ease,height .25s ease,opacity .25s ease;
+  width:18px;height:18px;opacity:.7;
+}
+/* Sparkle particles */
+.spark{
+  position:fixed;pointer-events:none;z-index:9997;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  animation:sparkFade .6s ease forwards;
+}
+@keyframes sparkFade{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(0) translateY(-20px)}
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:20px 60px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(253,248,240,0.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(194,103,58,.12);
+  box-shadow:0 4px 30px rgba(10,7,5,.07);
+  transition:padding .4s ease,box-shadow .4s ease;
+  animation:navIn 1s ease both;
+}
+nav.scrolled{
+  padding:14px 60px;
+  box-shadow:0 6px 40px rgba(10,7,5,.12);
+}
+@keyframes navIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:26px;font-weight:900;
+  color:var(--ink);letter-spacing:-.01em;
+  text-decoration:none;
+}
+.logo sup{font-size:11px;letter-spacing:.2em;font-weight:400;vertical-align:super;color:var(--terracotta)}
+.nav-r{display:flex;align-items:center;gap:36px}
+.nav-link{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);text-decoration:none;transition:color .3s}
+.nav-link:hover{color:var(--terracotta)}
+.nav-cta{
+  background:var(--ink);color:var(--parchment);
+  padding:11px 26px;border-radius:100px;
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;font-weight:500;
+  transition:all .3s;
+}
+.nav-cta:hover{background:var(--terracotta);transform:translateY(-2px);box-shadow:0 12px 30px rgba(194,103,58,.35)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  position:relative;
+  display:grid;
+  grid-template-rows:1fr auto;
+  overflow:hidden;
+  background:var(--parchment);
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 80% at 70% 40%, rgba(242,192,160,.5) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 20% 80%, rgba(232,184,109,.3) 0%, transparent 60%);
+}
+.hero-main{
+  position:relative;z-index:2;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding:140px 60px 60px;
+  gap:0;align-items:center;
+}
+.hero-text{position:relative}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--terracotta);margin-bottom:28px;
+  animation:fadeUp .9s ease .4s both;
+}
+.hero-kicker span{display:block;width:36px;height:1px;background:var(--terracotta)}
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(58px,7vw,108px);
+  font-weight:900;line-height:.95;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  animation:fadeUp .9s ease .55s both;
+}
+.hero-h1 .stroke{
+  -webkit-text-stroke:2px var(--terracotta);
+  color:transparent;
+}
+.hero-h1 .italic{font-style:italic;color:var(--terracotta)}
+.hero-tagline{
+  font-size:16px;line-height:1.75;color:var(--muted);
+  max-width:360px;margin:28px 0 44px;
+  animation:fadeUp .9s ease .7s both;
+}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .9s ease .85s both}
+.btn-fill{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--terracotta);color:#fff;
+  padding:16px 36px;border-radius:100px;
+  font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;transition:all .3s;
+}
+.btn-fill:hover{background:var(--rust);transform:translateY(-3px);box-shadow:0 20px 50px rgba(194,103,58,.4)}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1.5px solid var(--ink);color:var(--ink);
+  padding:15px 30px;border-radius:100px;
+  font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;transition:all .3s;
+}
+.btn-outline:hover{background:var(--ink);color:var(--parchment);transform:translateY(-3px)}
+
+.hero-right{
+  position:relative;
+  display:flex;justify-content:center;align-items:center;
+  animation:scaleIn .9s ease .3s both;
+}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+.hero-frame{
+  position:relative;
+  width:420px;height:560px;
+}
+.hero-frame img{
+  width:100%;height:100%;
+  object-fit:cover;
+  border-radius:220px 220px 28px 28px;
+  filter:saturate(1.1) brightness(.95);
+  display:block;
+}
+.hero-frame::before{
+  content:'';position:absolute;
+  inset:-12px;border-radius:235px 235px 40px 40px;
+  border:1.5px dashed rgba(194,103,58,.35);
+  z-index:-1;animation:spin 20s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-pill{
+  position:absolute;
+  bottom:-20px;left:-30px;
+  background:var(--ink);color:var(--parchment);
+  padding:18px 24px;border-radius:16px;
+  min-width:160px;
+  animation:floatUp 3s ease-in-out infinite;
+}
+@keyframes floatUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.pill-num{
+  font-family:'Playfair Display',serif;
+  font-size:34px;font-weight:700;color:var(--gold);display:block;line-height:1
+}
+.pill-lbl{font-size:11px;color:rgba(253,248,240,.55);letter-spacing:.1em;margin-top:4px}
+.hero-badge{
+  position:absolute;top:24px;right:-24px;
+  width:88px;height:88px;border-radius:50%;
+  background:var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  animation:floatDown 3.5s ease-in-out infinite;
+}
+@keyframes floatDown{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+.badge-star{font-size:20px;line-height:1}
+.badge-txt{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-top:2px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* TICKER */
+.ticker{
+  position:relative;z-index:3;
+  background:var(--terracotta);
+  padding:15px 0;overflow:hidden;
+}
+.ticker-track{
+  display:flex;white-space:nowrap;
+  animation:ticker 22s linear infinite;
+}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  display:inline-flex;align-items:center;gap:20px;
+  padding:0 32px;
+  font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:#fff;
+}
+.ticker-sep{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.4);flex-shrink:0}
+
+/* ── SPLIT FEATURE SECTION ── */
+.split{
+  display:grid;grid-template-columns:45% 55%;
+  min-height:85vh;
+}
+.split-img{
+  position:relative;overflow:hidden;
+}
+.split-img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.05);
+  transition:transform 8s ease;
+}
+.split-img:hover img{transform:scale(1.05)}
+.split-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(10,7,5,.15),rgba(194,103,58,.1));
+}
+.split-num{
+  position:absolute;bottom:40px;left:40px;
+  font-family:'Playfair Display',serif;
+  font-size:100px;font-weight:900;
+  color:rgba(253,248,240,.15);
+  line-height:1;
+}
+.split-content{
+  background:var(--deep);
+  color:var(--parchment);
+  padding:80px 70px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.split-tag{
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.split-tag::before{content:'';width:28px;height:1px;background:var(--gold)}
+.split-h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,58px);
+  font-weight:700;line-height:1.05;
+  margin-bottom:20px;color:var(--parchment);
+}
+.split-h2 em{font-style:italic;color:var(--gold)}
+.split-p{font-size:15px;line-height:1.8;color:rgba(253,248,240,.55);max-width:400px;margin-bottom:44px}
+
+.services-list{display:flex;flex-direction:column;gap:0}
+.svc{
+  display:flex;align-items:center;gap:0;
+  padding:20px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  cursor:none;
+  position:relative;overflow:hidden;
+  transition:all .3s;
+}
+.svc::after{
+  content:'';position:absolute;left:-100%;top:0;bottom:0;width:100%;
+  background:rgba(232,184,109,.06);
+  transition:left .4s ease;
+}
+.svc:hover::after{left:0}
+.svc:hover{padding-left:12px}
+.svc-num{
+  font-family:'Playfair Display',serif;
+  font-size:13px;color:rgba(253,248,240,.2);
+  width:40px;flex-shrink:0;
+}
+.svc-name{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:400;
+  color:var(--parchment);flex:1;
+}
+.svc-price{
+  font-size:14px;color:var(--gold);
+  letter-spacing:.05em;margin-right:10px;
+}
+.svc-arr{opacity:0;color:var(--gold);transition:opacity .3s,transform .3s;font-size:18px}
+.svc:hover .svc-arr{opacity:1;transform:translateX(4px)}
+
+/* ── BENTO GALLERY ── */
+.bento{
+  padding:80px 60px;
+  background:var(--parchment);
+}
+.bento-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:50px;
+}
+.bento-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,4vw,56px);
+  font-weight:900;line-height:1.05;color:var(--ink);
+}
+.bento-h em{font-style:italic;color:var(--terracotta)}
+.bento-sub{font-size:14px;color:var(--muted);max-width:300px;line-height:1.7}
+
+.bento-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:repeat(3,200px);
+  gap:14px;
+}
+.bento-cell{border-radius:20px;overflow:hidden;position:relative;cursor:none}
+.bento-cell img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,filter .4s}
+.bento-cell:hover img{transform:scale(1.07);filter:brightness(.85) saturate(1.2)}
+.bento-cell .cap{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:24px 20px 18px;
+  background:linear-gradient(transparent,rgba(10,7,5,.75));
+  color:#fff;
+  opacity:0;transition:opacity .35s;
+}
+.bento-cell:hover .cap{opacity:1}
+.cap-name{font-family:'Playfair Display',serif;font-size:18px}
+.cap-price{font-size:13px;color:var(--gold2);margin-top:3px}
+
+.b1{grid-column:1/6;grid-row:1/3}
+.b2{grid-column:6/9;grid-row:1/2}
+.b3{grid-column:9/13;grid-row:1/2}
+.b4{grid-column:6/10;grid-row:2/3}
+.b5{grid-column:10/13;grid-row:2/3}
+.b6{grid-column:1/5;grid-row:3/4}
+.b7{grid-column:5/9;grid-row:3/4}
+.b8{grid-column:9/13;grid-row:3/4}
+
+/* colored tiles */
+.bento-stat{
+  background:var(--terracotta);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:24px;
+}
+.bento-stat .big{
+  font-family:'Playfair Display',serif;
+  font-size:50px;font-weight:900;color:#fff;line-height:1;
+}
+.bento-stat .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:8px}
+.bento-cta-tile{
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  padding:28px;
+}
+.bento-cta-tile .tile-t{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:700;color:var(--parchment);
+  line-height:1.2;margin-bottom:14px;
+}
+.bento-cta-tile a{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:var(--ink);
+  padding:10px 20px;border-radius:100px;
+  font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;transition:all .3s;
+}
+.bento-cta-tile a:hover{background:var(--gold2);transform:translateY(-2px)}
+
+/* ── TESTIMONIALS ── */
+.reviews{
+  background:var(--deep);
+  padding:90px 60px;
+}
+.reviews-head{text-align:center;margin-bottom:60px}
+.reviews-head .rtag{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.reviews-head h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,4vw,54px);font-weight:700;
+  color:var(--parchment);
+}
+.reviews-head h2 em{font-style:italic;color:var(--gold)}
+
+.reviews-scroll{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.rcard{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:36px;
+  transition:all .4s;
+  opacity:0;transform:translateY(30px);
+}
+.rcard.vis{opacity:1;transform:none}
+.rcard:hover{border-color:rgba(232,184,109,.3);transform:translateY(-4px)}
+.rcard-stars{color:var(--gold);font-size:16px;letter-spacing:4px;margin-bottom:20px}
+.rcard-q{
+  font-family:'Playfair Display',serif;
+  font-size:19px;font-style:italic;font-weight:400;
+  color:var(--parchment);line-height:1.6;margin-bottom:28px;
+}
+.rcard-author{display:flex;align-items:center;gap:14px}
+.rcard-av{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--terracotta),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;
+  color:#fff;font-size:15px;
+}
+.rcard-name{font-size:13px;color:rgba(253,248,240,.7);letter-spacing:.05em}
+.rcard-service{font-size:11px;color:rgba(253,248,240,.3);margin-top:2px}
+
+/* ── BOOKING ── */
+.booking{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:80vh;
+}
+.book-left{
+  background:var(--terracotta);
+  padding:80px 70px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.book-left::before{
+  content:'SEDGLO';
+  position:absolute;bottom:-20px;left:-10px;
+  font-family:'Playfair Display',serif;
+  font-size:130px;font-weight:900;
+  color:rgba(0,0,0,.1);
+  letter-spacing:-.03em;white-space:nowrap;
+  pointer-events:none;
+}
+.book-left .btag{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:20px}
+.book-left h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,58px);font-weight:900;
+  color:#fff;line-height:1.05;margin-bottom:20px;
+}
+.book-left h2 em{font-style:italic}
+.book-left p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.65);max-width:380px;margin-bottom:44px}
+
+.contact-items{display:flex;flex-direction:column;gap:20px}
+.citem{
+  display:flex;align-items:center;gap:18px;
+  text-decoration:none;
+  padding:18px 22px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  backdrop-filter:blur(10px);
+  transition:all .3s;
+}
+.citem:hover{background:rgba(255,255,255,.22);transform:translateX(8px)}
+.citem-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.citem-l{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:3px}
+.citem-v{font-size:16px;color:#fff;font-weight:400}
+.citem-arr{margin-left:auto;color:rgba(255,255,255,.5);font-size:18px;transition:transform .3s}
+.citem:hover .citem-arr{transform:translateX(4px);color:#fff}
+
+.book-right{
+  background:var(--parchment);
+  padding:80px 70px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.book-right h3{
+  font-family:'Playfair Display',serif;
+  font-size:32px;font-weight:700;color:var(--ink);
+  margin-bottom:6px;
+}
+.book-right p{font-size:14px;color:var(--muted);margin-bottom:36px}
+
+.fgroup{margin-bottom:20px}
+.fgroup label{
+  display:block;font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px;
+}
+.fgroup input,.fgroup select{
+  width:100%;
+  background:#fff;
+  border:1.5px solid rgba(74,46,26,.12);
+  border-radius:12px;
+  padding:15px 18px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:300;color:var(--ink);
+  outline:none;transition:all .3s;cursor:none;
+  appearance:none;
+}
+.fgroup input:focus,.fgroup select:focus{
+  border-color:var(--terracotta);
+  box-shadow:0 0 0 4px rgba(194,103,58,.1);
+}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fsub{
+  width:100%;padding:18px;
+  background:var(--ink);color:var(--parchment);
+  border:none;border-radius:100px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  cursor:none;transition:all .3s;margin-top:8px;
+}
+.fsub:hover{background:var(--terracotta);transform:translateY(-3px);box-shadow:0 16px 40px rgba(194,103,58,.3)}
+
+/* ── HOURS BAND ── */
+.hours-band{
+  background:var(--ink);
+  padding:70px 60px;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;gap:40px;
+}
+.hb-left{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.5vw,48px);
+  font-weight:700;color:var(--parchment);
+}
+.hb-left em{font-style:italic;color:var(--gold)}
+.hb-center{
+  display:flex;gap:50px;
+}
+.hb-item-l{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(253,248,240,.35);margin-bottom:8px}
+.hb-item-v{font-family:'Playfair Display',serif;font-size:22px;color:var(--parchment)}
+.hb-divider{width:1px;background:rgba(253,248,240,.1)}
+.hb-right{text-align:right}
+.hb-right a{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--terracotta);color:#fff;
+  padding:15px 30px;border-radius:100px;
+  font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;transition:all .3s;
+}
+.hb-right a:hover{background:var(--gold);color:var(--ink);transform:translateY(-2px)}
+
+/* ── QR SCAN ── */
+.qr-section{
+  background:var(--parchment);
+  padding:80px 60px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+.qr-left h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,4vw,56px);font-weight:900;
+  line-height:1.05;color:var(--ink);margin-bottom:16px;
+}
+.qr-left h2 em{font-style:italic;color:var(--terracotta)}
+.qr-left p{font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:32px}
+.qr-steps{display:flex;flex-direction:column;gap:18px}
+.qr-step{display:flex;align-items:center;gap:16px}
+.qr-step-num{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--terracotta);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;flex-shrink:0;
+}
+.qr-step-t{font-size:14px;color:var(--mid)}
+.qr-right{
+  display:flex;flex-direction:column;align-items:center;
+  gap:20px;
+}
+.qr-frame{
+  position:relative;
+  padding:20px;
+  background:var(--ink);
+  border-radius:28px;
+  box-shadow:0 40px 80px rgba(0,0,0,.2);
+}
+.qr-frame img{display:block;border-radius:12px}
+.qr-label{font-size:12px;color:var(--muted);letter-spacing:.1em;text-align:center}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--deep);
+  padding:60px;
+  display:grid;grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.fl-brand .logo{color:var(--parchment)}
+.fl-brand p{font-size:12px;color:rgba(253,248,240,.35);margin-top:6px}
+.fc-copy{font-size:11px;color:rgba(253,248,240,.25);text-align:center;letter-spacing:.1em}
+.fr-book a{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--terracotta);color:#fff;
+  padding:13px 28px;border-radius:100px;
+  font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  text-decoration:none;font-weight:500;
+  transition:all .3s;
+}
+.fr-book a:hover{background:var(--gold);color:var(--ink);transform:translateY(-2px)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(32px);transition:all .8s cubic-bezier(.215,.61,.355,1)}
+.reveal.vis{opacity:1;transform:none}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:20px 24px}
+  .nav-r .nav-link{display:none}
+  .hero-main{grid-template-columns:1fr;padding:120px 24px 50px}
+  .hero-right{display:none}
+  .split{grid-template-columns:1fr}
+  .split-img{height:280px}
+  .split-content{padding:50px 30px}
+  .bento{padding:60px 24px}
+  .bento-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto;
+  }
+  .b1,.b2,.b3,.b4,.b5,.b6,.b7,.b8{
+    grid-column:auto;grid-row:auto;
+  }
+  .reviews{padding:60px 24px}
+  .reviews-scroll{grid-template-columns:1fr}
+  .booking{grid-template-columns:1fr}
+  .book-left{padding:60px 30px}
+  .book-right{padding:60px 30px}
+  .hours-band{grid-template-columns:1fr;text-align:center;padding:50px 24px}
+  .hb-center{flex-wrap:wrap;justify-content:center}
+  .hb-right{text-align:center}
+  .qr-section{grid-template-columns:1fr;padding:60px 24px;gap:40px}
+  footer{grid-template-columns:1fr;gap:24px;text-align:center;padding:50px 24px}
+  .frow{grid-template-columns:1fr}
+  .bento-header{flex-direction:column;gap:16px;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- SCISSORS CURSOR -->
+<div id="cur-wand">
+  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g transform="rotate(-40 15 15)">
+      <ellipse cx="11" cy="9" rx="2.2" ry="7.5" fill="#C2673A" opacity=".95"/>
+      <ellipse cx="19" cy="9" rx="2.2" ry="7.5" fill="#E8B86D" opacity=".95"/>
+      <circle cx="15" cy="14.5" r="2.4" fill="#FDF8F0" stroke="#C2673A" stroke-width="1.2"/>
+      <ellipse cx="10" cy="23" rx="3.8" ry="4.8" fill="none" stroke="#C2673A" stroke-width="1.8"/>
+      <ellipse cx="20" cy="23" rx="3.8" ry="4.8" fill="none" stroke="#E8B86D" stroke-width="1.8"/>
+    </g>
+    <path d="M24 2 L24.6 0 L25.2 2 L27.2 2.6 L25.2 3.2 L24.6 5.2 L24 3.2 L22 2.6 Z" fill="#E8B86D"/>
+    <path d="M5 6 L5.4 4.6 L5.8 6 L7.2 6.4 L5.8 6.8 L5.4 8.2 L5 6.8 L3.6 6.4 Z" fill="#C2673A" opacity=".8"/>
+  </svg>
+</div>
+<div class="cur-trail" id="curTrail"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Sedglo<sup>™</sup></a>
+  <div class="nav-r">
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#booking" class="nav-link">Book</a>
+    <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20at%20Sedglo" class="nav-cta">Book Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-main">
+    <div class="hero-text">
+      <div class="hero-kicker"><span></span> Tsakane Mall · Premium Salon</div>
+      <h1 class="hero-h1">
+        The Art<br>
+        of <span class="italic">Your</span><br>
+        <span class="stroke">Beauty</span>
+      </h1>
+      <p class="hero-tagline">Where every visit is a ritual. Expert stylists, transformative results, and an experience that stays with you.</p>
+      <div class="hero-btns">
+        <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20at%20Sedglo" class="btn-fill">💬 Book on WhatsApp</a>
+        <a href="#gallery" class="btn-outline">See Our Work ↓</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-frame">
+        <img src="https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&h=700" alt="Salon styling"/>
+        <div class="hero-pill">
+          <span class="pill-num">500+</span>
+          <div class="pill-lbl">Happy clients</div>
+        </div>
+        <div class="hero-badge">
+          <div class="badge-star">★</div>
+          <div class="badge-txt">5 Star Rated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">Braids<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Wash & Blow<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Gel Nails<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Hair Straightening<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Manicure & Pedicure<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Gents Cuts<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Walk-ins Welcome<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Braids<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Wash & Blow<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Gel Nails<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Hair Straightening<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Manicure & Pedicure<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Gents Cuts<span class="ticker-sep"></span></div>
+    <div class="ticker-item">Walk-ins Welcome<span class="ticker-sep"></span></div>
+  </div>
+</div>
+
+<!-- SERVICES SPLIT -->
+<section id="services" class="split">
+  <div class="split-img">
+    <img src="https://images.pexels.com/photos/3065171/pexels-photo-3065171.jpeg?auto=compress&cs=tinysrgb&h=800" alt="Braids"/>
+    <div class="split-img-overlay"></div>
+    <div class="split-num">01</div>
+  </div>
+  <div class="split-content">
+    <div class="split-tag">Services & Pricing</div>
+    <h2 class="split-h2">Everything You<br><em>Deserve</em></h2>
+    <p class="split-p">Premium services at honest prices. Each treatment is delivered with care, precision, and passion.</p>
+    <div class="services-list">
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20Wash%20%26%20Blow" class="svc" style="text-decoration:none">
+        <span class="svc-num">01</span>
+        <span class="svc-name">Wash & Blow</span>
+        <span class="svc-price">R120</span>
+        <span class="svc-arr">→</span>
+      </a>
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20Box%20Braids" class="svc" style="text-decoration:none">
+        <span class="svc-num">02</span>
+        <span class="svc-name">Box Braids</span>
+        <span class="svc-price">From R350</span>
+        <span class="svc-arr">→</span>
+      </a>
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20Hair%20Straightening" class="svc" style="text-decoration:none">
+        <span class="svc-num">03</span>
+        <span class="svc-name">Hair Straightening</span>
+        <span class="svc-price">R150</span>
+        <span class="svc-arr">→</span>
+      </a>
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20Gel%20Nails" class="svc" style="text-decoration:none">
+        <span class="svc-num">04</span>
+        <span class="svc-name">Gel Nails</span>
+        <span class="svc-price">R200</span>
+        <span class="svc-arr">→</span>
+      </a>
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20Mani%20%26%20Pedi" class="svc" style="text-decoration:none">
+        <span class="svc-num">05</span>
+        <span class="svc-name">Manicure & Pedicure</span>
+        <span class="svc-price">R250</span>
+        <span class="svc-arr">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO GALLERY -->
+<section id="gallery" class="bento">
+  <div class="bento-header reveal">
+    <div>
+      <div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--terracotta);margin-bottom:12px">Our Work</div>
+      <h2 class="bento-h">Crafted with<br><em>Intention</em></h2>
+    </div>
+    <p class="bento-sub">Every style tells a story. Browse our work and imagine what we can create for you.</p>
+  </div>
+  <div class="bento-grid reveal">
+    <!-- big feature -->
+    <div class="bento-cell b1">
+      <img src="https://images.pexels.com/photos/3993449/pexels-photo-3993449.jpeg?auto=compress&cs=tinysrgb&h=700" alt="Salon interior"/>
+      <div class="cap"><div class="cap-name">Luxury Styling</div><div class="cap-price">Premium Experience</div></div>
+    </div>
+    <!-- braids -->
+    <div class="bento-cell b2">
+      <img src="https://images.pexels.com/photos/4397898/pexels-photo-4397898.jpeg?auto=compress&cs=tinysrgb&h=350" alt="Braids"/>
+      <div class="cap"><div class="cap-name">Box Braids</div><div class="cap-price">From R350</div></div>
+    </div>
+    <!-- stat tile -->
+    <div class="bento-cell b3 bento-stat">
+      <div class="big">8+</div>
+      <div class="lbl">Services Available</div>
+    </div>
+    <!-- nails -->
+    <div class="bento-cell b4">
+      <img src="https://images.pexels.com/photos/3997386/pexels-photo-3997386.jpeg?auto=compress&cs=tinysrgb&h=350" alt="Nails"/>
+      <div class="cap"><div class="cap-name">Gel Nails</div><div class="cap-price">R200</div></div>
+    </div>
+    <!-- stat -->
+    <div class="bento-cell b5 bento-stat" style="background:var(--ink)">
+      <div class="big" style="color:var(--gold)">★5.0</div>
+      <div class="lbl">Client Rating</div>
+    </div>
+    <!-- blow -->
+    <div class="bento-cell b6">
+      <img src="https://images.pexels.com/photos/3993444/pexels-photo-3993444.jpeg?auto=compress&cs=tinysrgb&h=300" alt="Wash Blow"/>
+      <div class="cap"><div class="cap-name">Wash & Blow</div><div class="cap-price">R120</div></div>
+    </div>
+    <!-- straight -->
+    <div class="bento-cell b7">
+      <img src="https://images.pexels.com/photos/3738351/pexels-photo-3738351.jpeg?auto=compress&cs=tinysrgb&h=300" alt="Straightening"/>
+      <div class="cap"><div class="cap-name">Straightening</div><div class="cap-price">R150</div></div>
+    </div>
+    <!-- CTA tile -->
+    <div class="bento-cell b8 bento-cta-tile">
+      <div class="tile-t">Ready to transform your look?</div>
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20at%20Sedglo">Book Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="reviews" id="reviews">
+  <div class="reviews-head reveal">
+    <div class="rtag">✦ What Our Clients Say</div>
+    <h2>Stories of <em>Transformation</em></h2>
+  </div>
+  <div class="reviews-scroll">
+    <div class="rcard" data-d="0">
+      <div class="rcard-stars">★★★★★</div>
+      <div class="rcard-q">"I've never left a salon feeling this confident. The attention to detail is something else entirely."</div>
+      <div class="rcard-author">
+        <div class="rcard-av">Z</div>
+        <div><div class="rcard-name">Zinhle M.</div><div class="rcard-service">Braids</div></div>
+      </div>
+    </div>
+    <div class="rcard" data-d="150">
+      <div class="rcard-stars">★★★★★</div>
+      <div class="rcard-q">"My braids lasted 8 weeks and still looked fresh. These ladies are truly gifted."</div>
+      <div class="rcard-author">
+        <div class="rcard-av">T</div>
+        <div><div class="rcard-name">Thandi K.</div><div class="rcard-service">Box Braids</div></div>
+      </div>
+    </div>
+    <div class="rcard" data-d="300">
+      <div class="rcard-stars">★★★★★</div>
+      <div class="rcard-q">"From the moment I walked in I felt like royalty. Best salon experience I've ever had."</div>
+      <div class="rcard-author">
+        <div class="rcard-av">N</div>
+        <div><div class="rcard-name">Nomsa P.</div><div class="rcard-service">Wash & Blow</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking" class="booking">
+  <div class="book-left">
+    <div class="btag">Get in Touch</div>
+    <h2>Let's Create<br>Something <em>Beautiful</em></h2>
+    <p>Book via WhatsApp for the fastest response. We confirm within 30 minutes and walk-ins are always welcome.</p>
+    <div class="contact-items">
+      <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book%20at%20Sedglo" class="citem">
+        <div class="citem-icon">💬</div>
+        <div><div class="citem-l">Fastest Response</div><div class="citem-v">Book on WhatsApp</div></div>
+        <div class="citem-arr">→</div>
+      </a>
+      <a href="tel:+27XXXXXXXXX" class="citem">
+        <div class="citem-icon">📞</div>
+        <div><div class="citem-l">Call Us</div><div class="citem-v">+27 XX XXX XXXX</div></div>
+        <div class="citem-arr">→</div>
+      </a>
+      <a href="https://maps.google.com" class="citem">
+        <div class="citem-icon">📍</div>
+        <div><div class="citem-l">Visit Us</div><div class="citem-v">Tsakane Mall, Ekurhuleni</div></div>
+        <div class="citem-arr">→</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="book-right reveal">
+    <h3>Quick Booking</h3>
+    <p>Fill in below and we'll reach out to confirm your slot.</p>
+    <div class="frow">
+      <div class="fgroup"><label>First Name</label><input type="text" placeholder="Nomsa"/></div>
+      <div class="fgroup"><label>Last Name</label><input type="text" placeholder="Dlamini"/></div>
+    </div>
+    <div class="fgroup"><label>WhatsApp Number</label><input type="tel" placeholder="+27 XX XXX XXXX"/></div>
+    <div class="fgroup">
+      <label>Choose a Service</label>
+      <select>
+        <option value="">Select service...</option>
+        <option>Wash & Blow — R120</option>
+        <option>Box Braids — From R350</option>
+        <option>Hair Straightening — R150</option>
+        <option>Gel Nails — R200</option>
+        <option>Manicure & Pedicure — R250</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fgroup"><label>Date</label><input type="date"/></div>
+      <div class="fgroup"><label>Preferred Time</label><input type="time"/></div>
+    </div>
+    <button class="fsub" onclick="doBook()">Confirm Booking →</button>
+  </div>
+</section>
+
+<!-- HOURS BAND -->
+<div class="hours-band reveal">
+  <div class="hb-left">Open <em>Monday</em><br>through <em>Saturday</em></div>
+  <div class="hb-center">
+    <div>
+      <div class="hb-item-l">Hours</div>
+      <div class="hb-item-v">08:00 – 18:00</div>
+    </div>
+    <div class="hb-divider"></div>
+    <div>
+      <div class="hb-item-l">Location</div>
+      <div class="hb-item-v">Tsakane Mall</div>
+    </div>
+    <div class="hb-divider"></div>
+    <div>
+      <div class="hb-item-l">Walk-ins</div>
+      <div class="hb-item-v">Always Welcome</div>
+    </div>
+  </div>
+  <div class="hb-right">
+    <a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book">Book via WhatsApp →</a>
+  </div>
+</div>
+
+<!-- QR -->
+<section class="qr-section reveal">
+  <div class="qr-left">
+    <div style="font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--terracotta);margin-bottom:16px">Scan to Book</div>
+    <h2>One Scan.<br><em>New You.</em></h2>
+    <p>Point your camera at the QR code to open WhatsApp and book your appointment instantly.</p>
+    <div class="qr-steps">
+      <div class="qr-step"><div class="qr-step-num">1</div><div class="qr-step-t">Open your phone camera</div></div>
+      <div class="qr-step"><div class="qr-step-num">2</div><div class="qr-step-t">Point at the QR code</div></div>
+      <div class="qr-step"><div class="qr-step-num">3</div><div class="qr-step-t">Tap the WhatsApp link</div></div>
+      <div class="qr-step"><div class="qr-step-num">4</div><div class="qr-step-t">Send the message & you're booked!</div></div>
+    </div>
+  </div>
+  <div class="qr-right">
+    <div class="qr-frame">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://wa.me/27XXXXXXXXX?text=Hi%20I%20want%20to%20book%20at%20Sedglo%20Hair%20%26%20Beauty&color=C2673A&bgcolor=FDF8F0" alt="QR Code" width="220" height="220"/>
+    </div>
+    <div class="qr-label">Scan with any smartphone camera</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fl-brand">
+    <a href="#" class="logo" style="color:var(--parchment)">Sedglo<sup style="color:var(--terracotta)">™</sup></a>
+    <p>Ladies & Gents Hair · Nails · Beauty</p>
+  </div>
+  <div class="fc-copy">© 2025 Sedglo Hair & Beauty · Tsakane Mall, Ekurhuleni</div>
+  <div class="fr-book"><a href="https://wa.me/27XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20book">Book Now →</a></div>
+</footer>
+
+<script>
+// ── SCISSORS CURSOR WITH SPARKLE TRAIL ──
+const wand = document.getElementById('cur-wand');
+const trail = document.getElementById('curTrail');
+let wx=0,wy=0,lastSpark=0;
+
+document.addEventListener('mousemove', e => {
+  wx = e.clientX; wy = e.clientY;
+
+  // Move wand instantly
+  wand.style.left = wx + 'px';
+  wand.style.top  = wy + 'px';
+
+  // Rotate scissors toward movement direction
+  const now = Date.now();
+
+  // Sparkle particles every 80ms
+  if(now - lastSpark > 80){
+    lastSpark = now;
+    const s = document.createElement('div');
+    s.className = 'spark';
+    s.style.left = wx + 'px';
+    s.style.top  = wy + 'px';
+    s.style.width  = (Math.random()*5+3)+'px';
+    s.style.height = s.style.width;
+    s.style.background = Math.random()>.5 ? 'var(--gold)' : 'var(--terracotta)';
+    s.style.marginLeft = (Math.random()*20-10)+'px';
+    s.style.marginTop  = (Math.random()*20-10)+'px';
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 600);
+  }
+});
+
+// Lagging glow trail
+let tx=0,ty=0;
+(function loopTrail(){
+  tx += (wx-tx)*.09;
+  ty += (wy-ty)*.09;
+  trail.style.left = tx+'px';
+  trail.style.top  = ty+'px';
+  requestAnimationFrame(loopTrail);
+})();
+
+// Expand trail on hover
+document.querySelectorAll('a,button,input,select,.bento-cell,.svc,.citem').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    trail.style.width='50px';trail.style.height='50px';trail.style.opacity='.5';
+    wand.style.transform='translate(-4px,-4px) scale(1.25) rotate(-15deg)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    trail.style.width='18px';trail.style.height='18px';trail.style.opacity='.7';
+    wand.style.transform='translate(-4px,-4px) scale(1) rotate(0deg)';
+  });
+});
+
+// ── STICKY NAV SCROLL EFFECT ──
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}
+  });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Review cards stagger
+const robs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const d=parseInt(e.target.dataset.d)||0;
+      setTimeout(()=>e.target.classList.add('vis'),d);
+      robs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.rcard').forEach(el=>robs.observe(el));
+
+// Book form → WhatsApp
+function doBook(){
+  const fname=document.querySelectorAll('input[type=text]')[0]?.value;
+  const phone=document.querySelector('input[type=tel]')?.value;
+  const service=document.querySelector('select')?.value;
+  if(!fname||!phone||!service){alert('Please fill in all fields.');return;}
+  const msg=`Hi, I'm ${fname} and I'd like to book: ${service}. My WhatsApp: ${phone}.`;
+  window.open(`https://wa.me/2776977886?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// Count-up animation on hero stats
+const pillNum=document.querySelector('.pill-num');
+let counted=false;
+const statObs=new IntersectionObserver(([e])=>{
+  if(e.isIntersecting&&!counted){
+    counted=true;
+    let n=0;const target=500;
+    const interval=setInterval(()=>{
+      n+=17;if(n>=target){n=target;clearInterval(interval);}
+      pillNum.textContent=n+'+';
+    },25);
+  }
+},{threshold:.5});
+if(pillNum)statObs.observe(pillNum);
+</script>
+</body>
+</html>
