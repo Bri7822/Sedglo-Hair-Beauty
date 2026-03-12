@@ -284,11 +284,16 @@ footer{background:var(--deep);padding:40px 60px;display:flex;align-items:center;
   .frow{grid-template-columns:1fr}
   .bento-header{flex-direction:column;gap:16px;align-items:flex-start}
 }
+
+@media (max-width: 1024px) {
+  body { cursor: auto; }
+  .cur, .cur-trail, .spark { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div id="cur-wand">
+<div id="cur-wand" class="cur">
   <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g transform="rotate(-40 15 15)">
       <ellipse cx="11" cy="9" rx="2.2" ry="7.5" fill="#C2673A" opacity=".95"/>
